@@ -1,5 +1,5 @@
 import threading
-
+import time
 def asyncf(func, *args):
     thread = threading.Thread(target=func, args=(args))
     thread.daemon = True
