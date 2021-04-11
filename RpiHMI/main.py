@@ -3,7 +3,7 @@ import time
 import threading
 
 from mqttclient import mqttclient
-from ui import ui
+from qtui import qtui
 
 #sudo apt install python3-paho-mqtt
 def init():
@@ -17,7 +17,7 @@ def exit():
     print("exit")
 
 def wait():
-    ui.thread_start()
+    qtui.thread_start()
 
 if __name__ == '__main__':
     init()

@@ -2,8 +2,9 @@ from time import strftime
 from tkinter import *
 from tkinter.simpledialog import askstring
 import system
-import function
 import time
+import function
+
 class UI(object):
 
     def __init__(self):
@@ -14,13 +15,16 @@ class UI(object):
         self.window.resizable(False, False)
         if system.is_raspi() :
             self.window.attributes('-fullscreen', True)
-        self.exit_button = Button(self.window, bg="black", text="x", command=self.clickExitButton)
+
+        self.main_frame = Frame(self.window, bg="black")
+        self.main_frame.place(x=0, y=0, width=480, height=320)
+        self.exit_button = Button(self.main_frame , bg="black", text="x", command=self.clickExitButton)
         self.exit_button.place(x=465, y=0, width=15, height=15)
-        self.date_label = Label(self.window, bg="black", fg="white", font = ("Graphic", 20, 'bold'), relief='flat')
+        self.date_label = Label(self.main_frame , bg="black", fg="white", font = ("Graphic", 20, 'bold'), relief='flat')
         self.date_label.pack(expand=True)
-        self.time_label = Label(self.window, bg="black", fg="white", font = ("Graphic", 45, 'bold'), relief='flat')
+        self.time_label = Label(self.main_frame , bg="black", fg="white", font = ("Graphic", 45, 'bold'), relief='flat')
         self.time_label.pack(expand=True)
-        self.text_label = Label(self.window, bg="black", fg="white", font = ("Graphic", 45, 'bold'), relief='flat')
+        self.text_label = Label(self.main_frame , bg="black", fg="white", font = ("Graphic", 45, 'bold'), relief='flat')
         self.text_label.pack(expand=True)
         self.time_label.bind("<Button>", self.clickTimeLabel)
         self.display_index = 0
@@ -58,7 +62,7 @@ class UI(object):
         self.easter_eggs_flag -= 1
         if self.easter_eggs_flag > 1:
             self.easter_eggs_flag = 0
-            self.add_text("안나 여보 쫍쫍 사룽사룽")
+            self.add_text("안나 희성")
         elif self.easter_eggs_flag < 0:
             self.easter_eggs_flag = 0
         
@@ -86,16 +90,15 @@ class UI(object):
             return
         self.window.destroy()
 
-    def thread_loop(self):
-        while True:
-            self.pop_text()
-            self.update_label()
-            self.update_easter_eggs()
-            time.sleep(0.4)
-        
+    def update_view(self):
+        self.pop_text()
+        self.update_label()
+        self.update_easter_eggs()
 
+        function.timerf(0.4, self.update_view)
+        
     def thread_start(self):
-        function.asyncf(self.thread_loop)
+        self.update_view()
         self.window.mainloop()
 
 
